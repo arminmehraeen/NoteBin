@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void onFormSubmit () {
     if (_formKey.currentState!.validate()) {
       LoginEntity entity = LoginEntity(email: emailController.text, password: passwordController.text) ;
-      context.read<AuthCubit>().login(entity);
+      context.read<AuthCubit>().login(entity,context);
     }
   }
 

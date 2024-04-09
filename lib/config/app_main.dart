@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notebin/features/auth/presentation/bloc/auth_cubit.dart';
+import 'package:notebin/features/home/presentation/bloc/home_bloc.dart';
 import 'package:notebin/features/intro/presentation/cubit/intro_cubit.dart';
 
 import '../core/bloc/theme/theme_cubit.dart';
@@ -20,6 +21,7 @@ class AppMain extends StatelessWidget {
         BlocProvider(create: (_) => locator<ThemeCubit>()),
         BlocProvider(create: (_) => locator<AuthCubit>()),
         BlocProvider(create: (_) => locator<IntroCubit>()),
+        BlocProvider(create: (_) => locator<HomeBloc>()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {

@@ -33,7 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           email: emailController.text,
           password: passwordController.text,
           passwordConfirmation: passwordConfirmationController.text);
-      context.read<AuthCubit>().register(entity);
+      context.read<AuthCubit>().register(entity,context);
     }
   }
 

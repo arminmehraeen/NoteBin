@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notebin/core/resources/data_state.dart';
 import 'package:notebin/core/widgets/loading.dart';
 
 IconData convertThemeStateToIcon(ThemeMode themeMode) {
@@ -21,8 +22,8 @@ void showLoadingDialog ({required BuildContext context}) {
             onTap: () {
               Navigator.pop(context);
             },
-            child: Text("Loading ...")),
-        content: SizedBox(
+            child: const Text("Loading ...")),
+        content: const SizedBox(
           width: 100,
           height: 50,
           child: Loading(),
@@ -30,4 +31,13 @@ void showLoadingDialog ({required BuildContext context}) {
       )
   );
 }
+
+void dismissibleDialog ({required BuildContext context}) => Navigator.pop(context);
+
+// Future<DataState<T>> dialogRequest<T>({required BuildContext context,required Function() request})async {
+//   showLoadingDialog(context: context) ;
+//   var data = await request() ;
+//   dismissibleDialog(context: context) ;
+//   return data ;
+// }
 

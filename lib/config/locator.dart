@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:notebin/features/auth/auth_locator.dart';
+import 'package:notebin/features/home/home_locator.dart';
 import 'package:notebin/features/intro/intro_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,4 +25,5 @@ setup() async {
 
   IntroLocator(locator) ;
   AuthLocator(locator)  ;
+  HomeLocator(locator)  ;
 }

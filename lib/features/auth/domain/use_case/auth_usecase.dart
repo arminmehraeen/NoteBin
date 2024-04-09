@@ -27,13 +27,13 @@ class AuthUseCase  {
 
 
   Future<DataState<bool>> logout () async {
-
     var response = await apiService.post(ApiPath.logout) ;
 
     if(response.statusCode == 200) {
       await storageService.removeToken() ;
       return const DataSuccess(data: true) ;
     }
+
     return const DataFailed(error: "") ;
   }
 
