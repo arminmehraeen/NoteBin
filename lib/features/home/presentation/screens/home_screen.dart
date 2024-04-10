@@ -7,6 +7,8 @@ import 'package:notebin/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:notebin/features/auth/presentation/screens/login_screen.dart';
 import 'package:notebin/features/home/presentation/bloc/home_bloc.dart';
 import 'package:notebin/features/home/presentation/screens/add_post_screen.dart';
+import 'package:notebin/features/home/presentation/screens/show_post_screen.dart';
+import 'package:notebin/features/home/presentation/widgets/post_item_widget.dart';
 
 import '../../../../core/utils/app_ui_helper.dart';
 
@@ -44,6 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void onTap (var post) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostScreen(post: post),)) ;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,18 +79,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
           if (state is HomeDataLoaded) {
             List data = state.data;
+
+            if(data.isEmpty) {
+              return Center(child: Text("Empty Post"), ) ;
+             }
+
             return ListView.separated(
               separatorBuilder: (context, index) => const Divider(),
               itemCount: data.length,
               itemBuilder: (context, index) {
                 var item = data[index];
-                return Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: ListTile(
-                    title: Text(item['title']),
-                    subtitle: Text("Creator : ${item['user_id']}\n${item['body']}"),
-                    isThreeLine: true,
-                  ),
+                return GestureDetector(
+                  onTap: () => onTap(item),
+                  child: PostItemWidget(post: item)
                 );
               },);
           }

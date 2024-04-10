@@ -31,7 +31,6 @@ class ApiService extends BaseClientService {
     if (isAuth) headers = _addAccessToken(headers);
     Response response = await super.get(url, headers: headers);
     _logRequest(response);
-    if (response.statusCode == 403) {}
     return response;
   }
 
@@ -40,7 +39,15 @@ class ApiService extends BaseClientService {
     if (isAuth) headers = _addAccessToken(headers);
     Response response = await super.post(url, headers: headers, data: data);
     _logRequest(response);
-    if (response.statusCode == 403) {}
+    return response;
+  }
+
+  @override
+  Future<Response> delete(String url, {Map<String, String>? headers, dynamic data, bool isAuth = true}) async {
+    if (isAuth) headers = _addAccessToken(headers);
+    Response response = await super.delete(url, headers: headers, data: data);
+    _logRequest(response);
+
     return response;
   }
 

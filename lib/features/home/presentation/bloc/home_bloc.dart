@@ -33,5 +33,48 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     });
 
+
+    on<AddPost>((event, emit) async {
+
+
+
+      showLoadingDialog(context: event.context);
+      var dataState = await homeUseCase.addPost(title: event.title, body: event.body);
+      dismissibleDialog(context: event.context) ;
+
+      if (dataState is DataSuccess) {
+        Navigator.pop(event.context);
+        add(HomeDataLoad(context: event.context));
+      }
+
+      if (dataState is DataFailed) {
+
+        emit(HomeDataError(message: dataState.error!)) ;
+      }
+
+
+    });
+
+    on<DeletePost>((event, emit) async {
+
+
+
+      showLoadingDialog(context: event.context);
+      var dataState = await homeUseCase.deletePost(id: event.postId);
+      dismissibleDialog(context: event.context) ;
+
+      if (dataState is DataSuccess) {
+        Navigator.pop(event.context);
+        add(HomeDataLoad(context: event.context));
+      }
+
+      if (dataState is DataFailed) {
+
+        emit(HomeDataError(message: dataState.error!)) ;
+      }
+
+
+    });
+
   }
 }
