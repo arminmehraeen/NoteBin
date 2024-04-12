@@ -4,11 +4,12 @@ import 'package:notebin/core/utils/enums.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 
 class CustomTextFormField extends StatefulWidget {
-  const CustomTextFormField({super.key, required this.controller, required this.label, this.maxLine, this.suffixText, this.validationType});
+  const CustomTextFormField({super.key, required this.controller, required this.label, this.maxLine, this.suffixText, this.validationType, this.icon});
   final TextEditingController controller ;
   final String label ;
   final int? maxLine ;
   final String? suffixText ;
+  final Widget? icon ;
   final FormValidationType? validationType ;
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -47,12 +48,20 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 
         return null ;
       },
+      cursorColor: Theme.of(context).cardColor,
       controller: widget.controller,
-      decoration:  InputDecoration(
-
+      // style: TextStyle(color: Theme.of(context).cardColor),
+      decoration:  InputDecoration(prefixIcon: widget.icon,
       suffixText: widget.suffixText,
-        label: Text(widget.label),
-        border: const OutlineInputBorder(),
+        prefixIconColor: Theme.of(context).cardColor,
+        label: Text(widget.label,style: TextStyle(color: Theme.of(context).cardColor)),
+        border: OutlineInputBorder(
+    borderSide:  BorderSide(color: Theme.of(context).cardColor),),
+          focusedBorder: OutlineInputBorder(
+    borderSide:  BorderSide(color: Theme.of(context).cardColor),),
+          enabledBorder: OutlineInputBorder(
+            borderSide:  BorderSide(color: Theme.of(context).cardColor),
+          ),
       ),
     );
   }

@@ -16,66 +16,117 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final _formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController(text: "armin@gmail.com") ;
-  final passwordController = TextEditingController(text: "12345678") ;
+  final emailController = TextEditingController(text: "armin@gmail.com");
 
-  void onFormSubmit () {
+  final passwordController = TextEditingController(text: "12345678");
+
+  void onFormSubmit() {
     if (_formKey.currentState!.validate()) {
-      LoginEntity entity = LoginEntity(email: emailController.text, password: passwordController.text) ;
-      context.read<AuthCubit>().login(entity,context);
+      LoginEntity entity = LoginEntity(
+          email: emailController.text, password: passwordController.text);
+      context.read<AuthCubit>().login(entity, context);
     }
   }
 
-  void onChangePage () {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const RegisterScreen())) ;
+  void onChangePage() {
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => const RegisterScreen()));
   }
 
-
   void onLogin() {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen())) ;
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const HomeScreen()));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Login"),
+          elevation: 0,
         ),
-        body: BlocConsumer<AuthCubit,AuthState>(builder: (context, state) {
-          return Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomTextFormField(controller: emailController, label: "Email",validationType: FormValidationType.email),
-                    const SizedBox(height: 15),
-                    CustomTextFormField(controller: passwordController, label: "Password",validationType: FormValidationType.password,),
-                    const SizedBox(height: 15),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(onPressed: onFormSubmit, child: const Text("Login")),
-                        const SizedBox(width: 5),
-                        ElevatedButton(onPressed: onChangePage, child: const Text("Register")),
-                      ],
-                    )
-                  ],
+        body: Column(
+          children: [
+            Expanded(
+              flex: 4,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    boxShadow: [
+                      BoxShadow(
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.7),
+                          blurRadius: 1,
+                          blurStyle: BlurStyle.solid,
+                          spreadRadius: 8),
+                    ],
+                    borderRadius: const BorderRadius.vertical(
+                        bottom: Radius.circular(50))),
+                child: BlocConsumer<AuthCubit, AuthState>(
+                  builder: (context, state) {
+                    return Form(
+                        key: _formKey,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "NOTEBIN",
+                                style: TextStyle(
+                                    fontSize: 30,
+                                    color: Theme.of(context).cardColor,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 50),
+                              CustomTextFormField(
+                                  icon: const Icon(Icons.email_rounded),
+                                  controller: emailController,
+                                  label: "Email",
+                                  validationType: FormValidationType.email),
+                              const SizedBox(height: 15),
+                              CustomTextFormField(
+                                icon: const Icon(Icons.lock_rounded),
+                                controller: passwordController,
+                                label: "Password",
+                                validationType: FormValidationType.password,
+                              ),
+                            ],
+                          ),
+                        ));
+                  },
+                  listener: (context, state) {
+                    if (state is AuthMain && state.isLogin) {
+                      onLogin();
+                    }
+
+                    if (state is AuthMain && state.message != null) {
+                      showSnackBar(context: context, message: state.message!);
+                    }
+                  },
                 ),
-              )) ;
-        }, listener: (context, state) {
-
-          if(state is AuthMain && state.isLogin) {
-            onLogin() ;
-          }
-
-          if(state is AuthMain && state.message != null) {
-            showSnackBar(context: context, message: state.message!) ;
-          }
-        },));
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      onPressed: onFormSubmit, child: const Text("Login")),
+                  const SizedBox(height: 5),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(15),
+                    onTap: onChangePage,
+                    child: const Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 10,vertical: 2.5),
+                      child: Text("Don't have an account? Sign up "),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ));
   }
 }

@@ -51,53 +51,86 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Register"),
+          elevation: 0,
         ),
-        body: BlocConsumer<AuthCubit,AuthState>(builder: (context, state) {
-          return Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomTextFormField(
-                        controller: nameController, label: "Name",validationType: FormValidationType.name),
-                    const SizedBox(height: 15),
-                    CustomTextFormField(
-                        controller: emailController, label: "Email",validationType: FormValidationType.email,),
-                    const SizedBox(height: 15),
-                    CustomTextFormField(
-                        controller: passwordController, label: "Password",validationType: FormValidationType.password),
-                    const SizedBox(height: 15),
-                    CustomTextFormField(
-                        controller: passwordConfirmationController,
-                        label: "PasswordConfirmation",validationType: FormValidationType.password),
-                    const SizedBox(height: 15),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                            onPressed: onFormSubmit,
-                            child: const Text("Register")),
-                        const SizedBox(width: 5),
-                        ElevatedButton(
-                            onPressed: onChangePage, child: const Text("Login")),
-                      ],
-                    )
-                  ],
-                ),
-              )) ;
-        }, listener: (context, state) {
 
-          if(state is AuthMain && state.isRegister) {
-            onRegister() ;
-          }
+        body: Column(
+    children: [
+    Expanded(flex: 4,child: Container(
+      decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          boxShadow: [
+            BoxShadow(
+                color: Theme.of(context).primaryColor.withOpacity(0.7),
+                blurRadius: 1,
+                blurStyle: BlurStyle.solid,
+                spreadRadius: 8
+            ),
+          ],
+          borderRadius: const BorderRadius.vertical(bottom: Radius.circular(50))
+      ),
+      child: BlocConsumer<AuthCubit,AuthState>(builder: (context, state) {
+        return Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("NOTEBIN",style: TextStyle(fontSize: 30,color: Theme.of(context).cardColor,fontWeight: FontWeight.bold),),
+                  const SizedBox(height: 50),
+                  CustomTextFormField(
+                      icon: const Icon(Icons.title_rounded),
+                      controller: nameController, label: "Name",validationType: FormValidationType.name),
+                  const SizedBox(height: 15),
+                  CustomTextFormField(
+                    icon: const Icon(Icons.email_rounded),
+                    controller: emailController, label: "Email",validationType: FormValidationType.email,),
+                  const SizedBox(height: 15),
+                  CustomTextFormField(
+                      icon: const Icon(Icons.lock_rounded),
+                      controller: passwordController, label: "Password",validationType: FormValidationType.password),
+                  const SizedBox(height: 15),
+                  CustomTextFormField(
+                      icon: const Icon(Icons.lock_rounded),
+                      controller: passwordConfirmationController,
+                      label: "PasswordConfirmation",validationType: FormValidationType.password),
 
-          if(state is AuthMain && state.message != null) {
-            showSnackBar(context: context, message: state.message!) ;
-          }
-        },));
+                ],
+              ),
+            )) ;
+      }, listener: (context, state) {
+
+        if(state is AuthMain && state.isRegister) {
+          onRegister() ;
+        }
+
+        if(state is AuthMain && state.message != null) {
+          showSnackBar(context: context, message: state.message!) ;
+        }
+      },))
+    ),
+      Expanded(flex: 2,child:Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+              onPressed: onFormSubmit,
+              child: const Text("Sign up")),
+          const SizedBox(height: 5),
+          InkWell(
+            borderRadius: BorderRadius.circular(15),
+            onTap: onChangePage,
+            child: const Padding(
+              padding:  EdgeInsets.symmetric(horizontal: 10,vertical: 2.5),
+              child:  Text("Have an account? Login "),
+            ),
+          )
+        ],
+      )) ,
+
+    ],
+    ));
+
+
   }
 }

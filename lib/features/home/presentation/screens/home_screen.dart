@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             },)
           ],
-          title: const Text("Home"),
+          title: const Text("NOTEBIN"),
           centerTitle: true,
         ),
         floatingActionButton: FloatingActionButton(
@@ -81,19 +81,22 @@ class _HomeScreenState extends State<HomeScreen> {
             List data = state.data;
 
             if(data.isEmpty) {
-              return Center(child: Text("Empty Post"), ) ;
+              return const Center(child: Text("Empty Post"), ) ;
              }
 
-            return ListView.separated(
-              separatorBuilder: (context, index) => const Divider(),
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                var item = data[index];
-                return GestureDetector(
-                  onTap: () => onTap(item),
-                  child: PostItemWidget(post: item)
-                );
-              },);
+            return Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: ListView.separated(
+                separatorBuilder: (context, index) => const SizedBox(height: 5,),
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  var item = data[index];
+                  return GestureDetector(
+                    onTap: () => onTap(item),
+                    child: PostItemWidget(post: item)
+                  );
+                },),
+            );
           }
 
           return const DefaultWidget();

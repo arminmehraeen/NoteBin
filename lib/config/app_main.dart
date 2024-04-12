@@ -32,7 +32,7 @@ class AppMain extends StatelessWidget {
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
               locale: context.locale,
-              title: "World Clock",
+              title: "NOTEBIN",
               scrollBehavior:
                   CustomScrollBehavior().copyWith(scrollbars: false),
               darkTheme: AppTheme.dark,
