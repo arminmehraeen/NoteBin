@@ -9,7 +9,9 @@ class Keys {
 }
 
 class ApiPath {
-  static const host = "http://192.168.1.108:8080/api/";
+  static const _port = "8080";
+  static const _ip = "192.168.100.108";
+  static const host = "http://$_ip:$_port/api/";
   static const login = "login";
   static const register = "register";
   static const logout = "logout";
