@@ -16,6 +16,6 @@ void main() async {
         path: 'assets/translations',
         fallbackLocale: AppLocale.persian,
         saveLocale: true,
-        child: const AppMain()),
+        child: const AppMain())
   );
 }

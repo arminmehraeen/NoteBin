@@ -1,20 +1,48 @@
 part of 'home_bloc.dart';
 
-@immutable
-abstract class HomeState {}
+abstract class ActionStatus {}
+class ActionWait extends ActionStatus {}
+class ActionSuccess<T> extends ActionStatus {
+  final T data ;
+  ActionSuccess(this.data) ;
+}
+class ActionError extends ActionStatus {}
 
-class HomeDataLoading extends HomeState {}
+class HomeState {
 
-class HomeDataError extends HomeState {
-  final String message ;
-  HomeDataError({
-    required this.message,
+  final ActionStatus posts ;
+  final ActionStatus commendsOfPost ;
+  final ActionStatus addPost ;
+  final ActionStatus addComment ;
+  final ActionStatus deletePost ;
+
+  static HomeState init () => HomeState(
+      addComment: ActionWait(),
+      posts: ActionWait(), commendsOfPost: ActionWait(), addPost: ActionWait(), deletePost: ActionWait()) ;
+
+  const HomeState({
+    required this.posts,
+    required this.commendsOfPost,
+    required this.addPost,
+    required this.addComment,
+    required this.deletePost,
   });
+
+  HomeState copyWith({
+    ActionStatus? posts,
+    ActionStatus? commendsOfPost,
+    ActionStatus? addPost,
+    ActionStatus? addComment,
+    ActionStatus? deletePost,
+  }) {
+    return HomeState(
+      posts: posts ?? this.posts,
+      commendsOfPost: commendsOfPost ?? this.commendsOfPost,
+      addPost: addPost ?? this.addPost,
+      addComment: addComment ?? this.addComment,
+      deletePost: deletePost ?? this.deletePost,
+    );
+  }
+
 }
 
-class HomeDataLoaded extends HomeState {
-  final List data ;
-  HomeDataLoaded({
-    required this.data,
-  });
-}

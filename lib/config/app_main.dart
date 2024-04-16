@@ -33,8 +33,7 @@ class AppMain extends StatelessWidget {
               supportedLocales: context.supportedLocales,
               locale: context.locale,
               title: "NOTEBIN",
-              scrollBehavior:
-                  CustomScrollBehavior().copyWith(scrollbars: false),
+              scrollBehavior: CustomScrollBehavior().copyWith(scrollbars: false),
               darkTheme: AppTheme.dark,
               theme: AppTheme.light,
               themeMode: state.themeMode,

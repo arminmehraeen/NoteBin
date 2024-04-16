@@ -23,8 +23,7 @@ class BaseClientService {
     var dio = Dio();
     try {
       var response = await dio
-          .getUri(Uri.parse(ApiPath.host + url),
-          options: Options(headers: headers))
+          .getUri(Uri.parse(ApiPath.host + url), options: Options(headers: headers))
           .timeout(const Duration(seconds: Constants.defaultTimeOutDuration),
           onTimeout: _onTimeOut)
           .onError((DioException error, stackTrace) {

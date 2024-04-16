@@ -38,6 +38,15 @@ class StorageService {
     return token ;
   }
 
+  Future<void> saveUser({required int user}) async {
+    await prefs.setInt(Keys.user, user) ;
+  }
+
+  int? loadUser() {
+    int? token = prefs.getInt(Keys.user);
+    return token ;
+  }
+
   removeToken() async {
     await prefs.remove(Keys.token);
   }

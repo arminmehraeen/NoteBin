@@ -2,6 +2,7 @@ import 'dart:html';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/resources/data_state.dart';
@@ -14,66 +15,73 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   final HomeUseCase homeUseCase ;
-  HomeBloc({required this.homeUseCase}) : super(HomeDataLoading()) {
+  HomeBloc({required this.homeUseCase}) : super(HomeState.init()) {
 
     on<HomeDataLoad>((event, emit) async {
-
-      emit(HomeDataLoading());
-
+      emit(HomeState.init());
       var dataState = await homeUseCase.posts();
-
       if (dataState is DataSuccess) {
-        emit(HomeDataLoaded(data: dataState.data['data'])) ;
+        emit(state.copyWith(posts: ActionSuccess(dataState.data['data']))) ;
       }
-
       if (dataState is DataFailed) {
-        emit(HomeDataError(message: dataState.error!)) ;
+        emit(state.copyWith(posts: ActionError())) ;
       }
 
+    });
 
+
+    on<LoadCommends>((event, emit) async {
+
+      if(event.showLoad) {
+        emit(state.copyWith(commendsOfPost: ActionWait(),addComment: ActionWait()));
+      }else {
+        emit(state.copyWith(addComment: ActionWait()));
+      }
+
+      var dataState = await homeUseCase.commends(postId: event.postId);
+      if (dataState is DataSuccess) {
+        List data = dataState.data['data'] ;
+        emit(state.copyWith(commendsOfPost: ActionSuccess(data)));
+      }
+      if (dataState is DataFailed) {
+        emit(state.copyWith(commendsOfPost: ActionError())) ;
+      }
     });
 
 
     on<AddPost>((event, emit) async {
-
-
-
       showLoadingDialog(context: event.context);
       var dataState = await homeUseCase.addPost(title: event.title, body: event.body);
       dismissibleDialog(context: event.context) ;
-
       if (dataState is DataSuccess) {
-        Navigator.pop(event.context);
-        add(HomeDataLoad(context: event.context));
+        emit(state.copyWith(addPost: ActionSuccess("add post successfully"))) ;
       }
-
       if (dataState is DataFailed) {
-
-        emit(HomeDataError(message: dataState.error!)) ;
+        emit(state.copyWith(addPost: ActionError())) ;
       }
-
-
     });
 
-    on<DeletePost>((event, emit) async {
-
-
-
+    on<AddComment>((event, emit) async {
       showLoadingDialog(context: event.context);
-      var dataState = await homeUseCase.deletePost(id: event.postId);
+      var dataState = await homeUseCase.addComment(postId: event.postId,comment: event.comment);
       dismissibleDialog(context: event.context) ;
-
       if (dataState is DataSuccess) {
-        Navigator.pop(event.context);
-        add(HomeDataLoad(context: event.context));
+        emit(state.copyWith(addComment: ActionSuccess("add comment successfully"))) ;
       }
-
       if (dataState is DataFailed) {
-
-        emit(HomeDataError(message: dataState.error!)) ;
+        emit(state.copyWith(addComment: ActionError())) ;
       }
+    });
 
 
+    on<DeletePost>((event, emit) async {
+      var dataState = await homeUseCase.deletePost(id: event.postId);
+      if (dataState is DataSuccess) {
+        emit(state.copyWith(deletePost: ActionSuccess("delete post successfully"))) ;
+      }
+      if (dataState is DataFailed) {
+        emit(state.copyWith(deletePost: ActionError())) ;
+      }
     });
 
   }

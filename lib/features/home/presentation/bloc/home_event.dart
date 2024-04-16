@@ -4,10 +4,7 @@ part of 'home_bloc.dart';
 abstract class HomeEvent {}
 
 class HomeDataLoad extends HomeEvent {
-  final BuildContext context ;
-  HomeDataLoad({
-    required this.context,
-  });
+
 }
 
 class DeletePost extends HomeEvent {
@@ -20,6 +17,17 @@ class DeletePost extends HomeEvent {
   });
 }
 
+class LoadCommends extends HomeEvent {
+  final BuildContext context ;
+  final int postId ;
+  final bool showLoad ;
+
+  LoadCommends({
+    required this.context,
+    required this.postId,
+    this.showLoad = true,
+  });
+}
 
 class AddPost extends HomeEvent {
   final BuildContext context ;
@@ -29,6 +37,19 @@ class AddPost extends HomeEvent {
     required this.context,
     required this.title,
     required this.body,
+  });
+}
+
+
+class AddComment extends HomeEvent {
+  final BuildContext context ;
+  final String comment;
+  final int postId ;
+
+   AddComment({
+    required this.context,
+    required this.comment,
+    required this.postId,
   });
 }
 

@@ -18,8 +18,8 @@ class AuthUseCase  {
     var response = await apiService.post(ApiPath.login,isAuth: false,data: entity.toMap()) ;
 
     if(response.statusCode == 200) {
-      String token = response.data['data']['token'];
-      await storageService.saveToken(token: token) ;
+      await storageService.saveToken(token: response.data['data']['token']) ;
+      await storageService.saveUser(user: response.data['data']['user']['id']) ;
       return const DataSuccess(data: true) ;
     }
     return const DataFailed(error: "") ;
@@ -42,6 +42,9 @@ class AuthUseCase  {
     var response = await apiService.post(ApiPath.register,isAuth: false,data: entity.toMap()) ;
 
     if(response.statusCode == 201) {
+
+      await storageService.saveToken(token: response.data['data']['token']) ;
+      await storageService.saveUser(user: response.data['data']['user']['id']) ;
       return const DataSuccess(data: true) ;
     }
     return const DataFailed(error: "") ;

@@ -6,6 +6,7 @@ class Keys {
   static const themeMode = "ThemeMode";
   static const locale = "Locale";
   static const token = "Token";
+  static const user = "User";
 }
 
 class ApiPath {
@@ -16,6 +17,7 @@ class ApiPath {
   static const register = "register";
   static const logout = "logout";
   static const posts = "posts";
+  static const commends = "commends";
 }
 
 
