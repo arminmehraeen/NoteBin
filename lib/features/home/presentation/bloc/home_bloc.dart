@@ -1,6 +1,7 @@
-import 'dart:html';
+
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
@@ -51,7 +52,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     on<AddPost>((event, emit) async {
       showLoadingDialog(context: event.context);
-      var dataState = await homeUseCase.addPost(title: event.title, body: event.body);
+      var dataState = await homeUseCase.addPost(title: event.title, body: event.body,postFile: event.postFile);
       dismissibleDialog(context: event.context) ;
       if (dataState is DataSuccess) {
         emit(state.copyWith(addPost: ActionSuccess("add post successfully"))) ;

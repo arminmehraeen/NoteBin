@@ -42,6 +42,7 @@ class ApiService extends BaseClientService {
     return response;
   }
 
+
   @override
   Future<Response> delete(String url, {Map<String, String>? headers, dynamic data, bool isAuth = true}) async {
     if (isAuth) headers = _addAccessToken(headers);

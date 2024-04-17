@@ -13,6 +13,7 @@ class ApiPath {
   static const _port = "8080";
   static const _ip = "192.168.100.108";
   static const host = "http://$_ip:$_port/api/";
+  static const imageHost = "http://$_ip:$_port/";
   static const login = "login";
   static const register = "register";
   static const logout = "logout";

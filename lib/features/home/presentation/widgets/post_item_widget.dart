@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notebin/core/utils/constants.dart';
 
 class PostItemWidget extends StatefulWidget {
   const PostItemWidget({super.key,required this.post});
@@ -12,11 +13,6 @@ class _PostItemWidgetState extends State<PostItemWidget> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(0),
-      decoration: BoxDecoration(
-        image: const DecorationImage(image: AssetImage("assets/images/picture.jpg"),fit: BoxFit.cover),
-
-        borderRadius: BorderRadius.circular(20)
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -32,7 +28,9 @@ class _PostItemWidgetState extends State<PostItemWidget> {
               title:  Text(widget.post['user']['name']),
             ),
           ),
-          Image.asset("assets/images/picture.jpg",width: double.infinity,height: 150,fit: BoxFit.cover,),
+          widget.post['image'] == null ?
+          Image.asset("assets/images/picture.jpg",width: double.infinity,height: 150,fit: BoxFit.cover,) :
+          Image.network(ApiPath.imageHost + widget.post['image'],width: double.infinity,height: 150,fit: BoxFit.cover,),
           Row(
             children: [
 

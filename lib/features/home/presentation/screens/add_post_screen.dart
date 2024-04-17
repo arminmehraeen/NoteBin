@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notebin/core/widgets/form/file_picker_form_field.dart';
 import 'package:notebin/features/home/presentation/bloc/home_bloc.dart';
-
+import 'package:dio/dio.dart';
 import '../../../../core/widgets/form/custom_text_form_field.dart';
 
 class AddPostScreen extends StatefulWidget {
@@ -17,10 +20,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
   final _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final bodyController = TextEditingController();
+  MultipartFile? postFile ;
 
   void onFormSubmit() {
     if (_formKey.currentState!.validate()) {
-      context.read<HomeBloc>().add(AddPost(context: context, title: titleController.text, body: bodyController.text));
+      context.read<HomeBloc>().add(AddPost(context: context, title: titleController.text, body: bodyController.text,postFile: postFile));
     }
   }
 
@@ -46,6 +50,21 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   CustomTextFormField(
                       isDark: true ,
                       controller: bodyController, label: "Body",maxLine: 6),
+                  const SizedBox(height: 15),
+                  CustomFilePickerFormField(
+
+                      isRequired: false,
+                      onChange: (file) {
+                    var ext = file.name.split(".").last;
+                    MultipartFile multipartFile = file.isWeb
+                        ? MultipartFile.fromBytes(
+                        file.uInt8List!.map((e) => e.toInt()).toList() ,
+                        filename: "image.$ext") : MultipartFile.fromFileSync(
+                      File(file.path!).path,
+                      filename: "image.$ext",
+                    );
+                    postFile = multipartFile ;
+                   }) ,
                   const SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

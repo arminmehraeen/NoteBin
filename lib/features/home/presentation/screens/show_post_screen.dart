@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
 import 'package:notebin/core/widgets/default_widget.dart';
 import 'package:notebin/core/widgets/form/custom_text_form_field.dart';
-import 'package:notebin/features/home/presentation/bloc/home_bloc.dart';
 
+
+import '../../../../core/utils/constants.dart';
 import '../../../../core/widgets/loading.dart';
+import '../bloc/home_bloc.dart';
 
 class ShowPostScreen extends StatefulWidget {
   const ShowPostScreen({super.key, this.post});
@@ -45,7 +47,9 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
             leading: CircleAvatar(backgroundColor: Theme.of(context).primaryColor,child: Icon(Icons.person,color: Theme.of(context).cardColor,),),
             title:  Text(widget.post['user']['name']),
           ),
-          Image.asset("assets/images/picture.jpg",width: double.infinity),
+          widget.post['image'] == null ?
+          Image.asset("assets/images/picture.jpg",width: double.infinity) :
+          Image.network(ApiPath.imageHost + widget.post['image'],width: double.infinity),
           ListTile(
             title: const Text("Date :"),
             subtitle: Text(widget.post['created_at'] ?? ""),

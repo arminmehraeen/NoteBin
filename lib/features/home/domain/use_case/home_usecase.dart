@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:notebin/core/services/api_service.dart';
 import 'package:notebin/core/utils/constants.dart';
 import 'package:notebin/features/auth/domain/entities/login_entity.dart';
@@ -34,11 +35,14 @@ class HomeUseCase  {
     return const DataFailed(error: "") ;
   }
 
-  Future<DataState> addPost ({required String title , required String body}) async {
+  Future<DataState> addPost ({required String title , required String body,MultipartFile? postFile}) async {
 
-    var response = await apiService.post(ApiPath.posts,data: {
+    var response ;
+
+    response = await apiService.post(ApiPath.posts,data: {
       "title" : title ,
-      "body" : body
+      "body" : body ,
+      if(postFile != null) "image" : postFile
     }) ;
 
     if(response.statusCode == 201) {

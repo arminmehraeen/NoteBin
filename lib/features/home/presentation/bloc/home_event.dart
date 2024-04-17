@@ -33,13 +33,14 @@ class AddPost extends HomeEvent {
   final BuildContext context ;
   final String title ;
   final String body ;
+  final MultipartFile? postFile ;
   AddPost({
     required this.context,
     required this.title,
     required this.body,
+    this.postFile,
   });
 }
-
 
 class AddComment extends HomeEvent {
   final BuildContext context ;
