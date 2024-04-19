@@ -46,10 +46,10 @@ class BaseClientService {
       {Map<String, String>? headers, dynamic data}) async {
     var dio = Dio();
     try {
-      var res = FormData.fromMap(data) ;
+
       var response = await dio
           .postUri(Uri.parse(ApiPath.host + url),
-              data: res, options: Options(headers: headers))
+              data: data != null ? FormData.fromMap(data)  : data, options: Options(headers: headers))
           .timeout(const Duration(seconds: Constants.defaultTimeOutDuration),
               onTimeout: _onTimeOut)
           .onError((DioException error, stackTrace) {

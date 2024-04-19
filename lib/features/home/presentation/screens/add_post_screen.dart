@@ -52,13 +52,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       controller: bodyController, label: "Body",maxLine: 6),
                   const SizedBox(height: 15),
                   CustomFilePickerFormField(
-
                       isRequired: false,
-                      onChange: (file) {
+                      onChange: (file) async {
                     var ext = file.name.split(".").last;
                     MultipartFile multipartFile = file.isWeb
                         ? MultipartFile.fromBytes(
-                        file.uInt8List!.map((e) => e.toInt()).toList() ,
+                        file.uInt8List as List<int>,
                         filename: "image.$ext") : MultipartFile.fromFileSync(
                       File(file.path!).path,
                       filename: "image.$ext",

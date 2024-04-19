@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import '../models/result_information_model.dart';
@@ -11,7 +13,7 @@ class FilePickerService {
             : FileType.custom,
         allowedExtensions: allowedExtensions,
         dialogTitle: "Choose File",
-        allowMultiple: false);
+        allowMultiple: true);
     if (result != null) {
       PlatformFile file = result.files.single;
       if(maximumSize != null) {

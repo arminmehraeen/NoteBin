@@ -107,6 +107,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                     children: data.where((e) => e['message'] != null).toList().map((e) => ListTile(
 
                       leading: const Icon(Icons.person),
+                      subtitle: Text(e['user']['name']),
                       title: Text(e['message'].toString()),
                     )).toList()),
               );
@@ -117,6 +118,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
 
             if(state.addComment is ActionSuccess){
               context.read<HomeBloc>().add(LoadCommends(context: context, postId: widget.post['id'],showLoad: false));
+              commentController.clear();
             }
 
             if(state.deletePost is ActionSuccess) {
