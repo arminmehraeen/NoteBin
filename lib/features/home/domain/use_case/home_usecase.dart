@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
 import 'package:notebin/core/services/api_service.dart';
 import 'package:notebin/core/utils/constants.dart';
 import 'package:notebin/features/auth/domain/entities/login_entity.dart';

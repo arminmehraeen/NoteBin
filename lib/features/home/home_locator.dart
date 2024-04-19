@@ -6,7 +6,7 @@ class HomeLocator {
 
   HomeLocator(GetIt locator) {
     var homeUseCase = HomeUseCase(apiService: locator(), storageService: locator()) ;
-    locator.registerSingleton(HomeBloc(homeUseCase: homeUseCase)) ;
+    locator.registerSingleton(HomeBloc(homeUseCase: homeUseCase,stroageService: locator())) ;
   }
 
 }

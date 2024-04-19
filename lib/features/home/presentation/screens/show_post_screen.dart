@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
+import 'package:notebin/core/models/commend_model.dart';
 import 'package:notebin/core/widgets/default_widget.dart';
 import 'package:notebin/core/widgets/form/custom_text_form_field.dart';
 
@@ -95,7 +96,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
             }
 
             if (status is ActionSuccess) {
-              List data = status.data;
+              List<CommendModel> data = status.data;
 
               if(data.isEmpty) {
                 return const Center(child: Text("Empty Commends"), ) ;
@@ -104,11 +105,11 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
               return Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Column(
-                    children: data.where((e) => e['message'] != null).toList().map((e) => ListTile(
-
+                    children: data.map((e) => ListTile(
+                      trailing: e.isMine ?  IconButton(onPressed: () {}, icon: const Icon(Icons.close,size: 12,)) : null,
                       leading: const Icon(Icons.person),
-                      subtitle: Text(e['user']['name']),
-                      title: Text(e['message'].toString()),
+                      subtitle: Text(e.user.name),
+                      title: Text(e.message),
                     )).toList()),
               );
             }

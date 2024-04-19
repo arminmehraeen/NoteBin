@@ -1,12 +1,17 @@
 
 
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
+import 'package:notebin/core/models/commend_model.dart';
+import 'package:notebin/core/models/user_model.dart';
 
 import '../../../../core/resources/data_state.dart';
+import '../../../../core/services/storage_service.dart';
 import '../../../../core/utils/app_ui_helper.dart';
 import '../../domain/use_case/home_usecase.dart';
 
@@ -16,7 +21,8 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   final HomeUseCase homeUseCase ;
-  HomeBloc({required this.homeUseCase}) : super(HomeState.init()) {
+  final StorageService stroageService ;
+  HomeBloc({required this.homeUseCase,required this.stroageService}) : super(HomeState.init()) {
 
     on<HomeDataLoad>((event, emit) async {
       emit(HomeState.init());
@@ -42,7 +48,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       var dataState = await homeUseCase.commends(postId: event.postId);
       if (dataState is DataSuccess) {
         List data = dataState.data['data'] ;
-        emit(state.copyWith(commendsOfPost: ActionSuccess(data)));
+        String? userString = stroageService.loadUser() ;
+        UserModel? user;
+        if(userString != null) {
+          user = UserModel.fromMap(json.decode(userString!)) ;
+        }
+        List<CommendModel> commends = data.map((e) => CommendModel.fromMap(e,user?.id)).toList() ;
+        emit(state.copyWith(commendsOfPost: ActionSuccess<List<CommendModel>>(commends)));
       }
       if (dataState is DataFailed) {
         emit(state.copyWith(commendsOfPost: ActionError())) ;
