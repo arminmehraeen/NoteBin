@@ -1,6 +1,5 @@
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notebin/features/home/presentation/cubit/home_cubit.dart';
 import 'package:notebin/features/post/presentation/screens/add_post_screen.dart';

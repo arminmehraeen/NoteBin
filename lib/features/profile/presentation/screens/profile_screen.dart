@@ -4,10 +4,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notebin/core/models/user_model.dart';
 import 'package:notebin/core/widgets/user_profile_widget.dart';
-import 'package:notebin/features/home/presentation/cubit/home_cubit.dart';
 
 import '../../../../core/models/action_status.dart';
-import '../../../../core/utils/constants.dart';
 import '../../../../core/widgets/default_widget.dart';
 import '../../../../core/widgets/loading.dart';
 import '../../../auth/presentation/bloc/auth_cubit.dart';

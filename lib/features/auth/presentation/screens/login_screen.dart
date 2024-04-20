@@ -8,7 +8,6 @@ import 'package:notebin/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:notebin/features/auth/presentation/screens/register_screen.dart';
 
 import '../../../home/presentation/screens/home_screen.dart';
-import '../../../post/presentation/screens/posts_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

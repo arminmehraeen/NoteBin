@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notebin/core/utils/enums.dart';
 import 'package:notebin/features/auth/domain/entities/register_entity.dart';
 import 'package:notebin/features/auth/presentation/screens/login_screen.dart';
-import 'package:notebin/features/post/presentation/screens/posts_screen.dart';
 
 import '../../../../core/utils/app_ui_helper.dart';
 import '../../../../core/widgets/form/custom_text_form_field.dart';

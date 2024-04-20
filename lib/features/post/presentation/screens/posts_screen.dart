@@ -1,12 +1,7 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/logger.dart';
 import 'package:notebin/core/widgets/default_widget.dart';
 import 'package:notebin/core/widgets/loading.dart';
-import 'package:notebin/features/auth/presentation/bloc/auth_cubit.dart';
-import 'package:notebin/features/auth/presentation/screens/login_screen.dart';
 import 'package:notebin/features/post/presentation/bloc/post_bloc.dart';
 import 'package:notebin/features/post/presentation/screens/show_post_screen.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
