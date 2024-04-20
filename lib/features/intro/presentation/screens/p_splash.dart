@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:notebin/features/auth/presentation/screens/login_screen.dart';
 import 'package:notebin/features/home/presentation/screens/home_screen.dart';
 
+
 import '../../../../core/widgets/loading.dart';
+import '../../../post/presentation/screens/posts_screen.dart';
 import '../cubit/intro_cubit.dart';
 
 class SplashScreen extends StatefulWidget {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:logger/logger.dart';
 import 'package:notebin/core/models/user_model.dart';
 import 'package:notebin/core/services/api_service.dart';
 import 'package:notebin/core/utils/constants.dart';

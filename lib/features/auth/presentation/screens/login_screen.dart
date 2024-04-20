@@ -6,7 +6,9 @@ import 'package:notebin/core/widgets/form/custom_text_form_field.dart';
 import 'package:notebin/features/auth/domain/entities/login_entity.dart';
 import 'package:notebin/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:notebin/features/auth/presentation/screens/register_screen.dart';
-import 'package:notebin/features/home/presentation/screens/home_screen.dart';
+
+import '../../../home/presentation/screens/home_screen.dart';
+import '../../../post/presentation/screens/posts_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

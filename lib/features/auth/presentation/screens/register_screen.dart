@@ -1,12 +1,17 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notebin/core/utils/enums.dart';
 import 'package:notebin/features/auth/domain/entities/register_entity.dart';
 import 'package:notebin/features/auth/presentation/screens/login_screen.dart';
-import 'package:notebin/features/home/presentation/screens/home_screen.dart';
+import 'package:notebin/features/post/presentation/screens/posts_screen.dart';
 
 import '../../../../core/utils/app_ui_helper.dart';
 import '../../../../core/widgets/form/custom_text_form_field.dart';
+import '../../../../core/widgets/form/file_picker_form_field.dart';
+import '../../../home/presentation/screens/home_screen.dart';
 import '../bloc/auth_cubit.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -26,10 +31,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final nameController = TextEditingController(text: "armin mehraein");
 
+  MultipartFile? postFile ;
+
+
   void onFormSubmit() {
     if (_formKey.currentState!.validate()) {
       RegisterEntity entity = RegisterEntity(
           name: nameController.text,
+          image: postFile,
           email: emailController.text,
           password: passwordController.text,
           passwordConfirmation: passwordConfirmationController.text);
@@ -53,7 +62,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         appBar: AppBar(
           elevation: 0,
         ),
-
         body: Column(
     children: [
     Expanded(flex: 4,child: Container(
@@ -90,6 +98,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   CustomTextFormField(
                       icon: const Icon(Icons.lock_rounded),
                       controller: passwordController, label: "Password",validationType: FormValidationType.password),
+                  const SizedBox(height: 15),
+                  CustomFilePickerFormField(
+                      isRequired: false,
+                      onChange: (file) async {
+                        var ext = file.name.split(".").last;
+                        MultipartFile multipartFile = file.isWeb
+                            ? MultipartFile.fromBytes(
+                            file.uInt8List as List<int>,
+                            filename: "image.$ext") : MultipartFile.fromFileSync(
+                          File(file.path!).path,
+                          filename: "image.$ext",
+                        );
+                        postFile = multipartFile ;
+                      }) ,
                   const SizedBox(height: 15),
                   CustomTextFormField(
                       icon: const Icon(Icons.lock_rounded),

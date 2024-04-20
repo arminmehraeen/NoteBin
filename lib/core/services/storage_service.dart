@@ -46,6 +46,7 @@ class StorageService {
 
   removeToken() async {
     await prefs.remove(Keys.token);
+    await prefs.remove(Keys.user);
   }
 
 }

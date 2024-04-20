@@ -8,11 +8,11 @@ import 'package:notebin/features/auth/domain/entities/register_entity.dart';
 import '../../../../core/resources/data_state.dart';
 import '../../../../core/services/storage_service.dart';
 
-class HomeUseCase  {
+class PostUseCase  {
 
   final ApiService apiService ;
   final StorageService storageService ;
-  HomeUseCase({required this.apiService,required this.storageService}) ;
+  PostUseCase({required this.apiService,required this.storageService}) ;
 
 
   Future<DataState> posts () async {
@@ -72,6 +72,15 @@ class HomeUseCase  {
     }) ;
 
     if(response.statusCode == 201) {
+      return DataSuccess(data: response.data) ;
+    }
+    return const DataFailed(error: "") ;
+  }
+
+  deleteComment({required int commendId}) async {
+
+    var response = await apiService.delete("${ApiPath.commends}/$commendId") ;
+    if(response.statusCode == 200) {
       return DataSuccess(data: response.data) ;
     }
     return const DataFailed(error: "") ;

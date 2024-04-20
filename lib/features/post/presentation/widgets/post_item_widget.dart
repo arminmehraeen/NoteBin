@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:notebin/core/utils/constants.dart';
 
+import '../../../../core/widgets/user_profile_widget.dart';
+
 class PostItemWidget extends StatefulWidget {
   const PostItemWidget({super.key,required this.post});
   final post ;
@@ -24,7 +26,8 @@ class _PostItemWidgetState extends State<PostItemWidget> {
               color: Theme.of(context).primaryColor,),
             child: ListTile(
               subtitle: Text(widget.post['title']),
-              leading: CircleAvatar(backgroundColor: Theme.of(context).primaryColor,child: Icon(Icons.person,color: Theme.of(context).cardColor,),),
+              leading:
+              UserProfileWidget(url: widget.post['user']['image'],),
               title:  Text(widget.post['user']['name']),
             ),
           ),
