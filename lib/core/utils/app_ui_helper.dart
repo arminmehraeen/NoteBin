@@ -14,9 +14,9 @@ void showSnackBar({required BuildContext context,required String message}) {
 
 BoxDecoration formWidgetDecoration(bool hasError,BuildContext context) {
   return BoxDecoration(
-    border: hasError ? Border.all(color: Colors.redAccent, width: 1) : null,
-    color: Theme.of(context).primaryColor,
-    borderRadius: const BorderRadius.all(Radius.circular(15)),
+    border: hasError ? Border.all(color: Colors.redAccent, width: 1) : Border.all(color: Theme.of(context).primaryColor, width: 1),
+
+    borderRadius: const BorderRadius.all(Radius.circular(5)),
   );
 }
 

@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import '../models/result_information_model.dart';
