@@ -28,7 +28,6 @@ class AuthCubit extends Cubit<AuthState> {
     if (data is DataFailed) {
       emit(AuthMain(message: "Login unSuccessfully"));
     }
-
   }
 
   Future logout(BuildContext context) async {

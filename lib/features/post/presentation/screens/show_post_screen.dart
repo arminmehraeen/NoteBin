@@ -4,6 +4,7 @@ import 'package:notebin/core/models/commend_model.dart';
 import 'package:notebin/core/widgets/default_widget.dart';
 import 'package:notebin/core/widgets/form/custom_text_form_field.dart';
 import 'package:notebin/features/post/presentation/bloc/post_bloc.dart';
+import 'package:swipe_to/swipe_to.dart';
 
 
 import '../../../../core/models/action_status.dart';
@@ -30,6 +31,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
 
   TextEditingController commentController = TextEditingController() ;
   final _formKey = GlobalKey<FormState>();
+  CommendModel? refCommend;
 
   @override
   Widget build(BuildContext context) {
@@ -77,34 +79,46 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
               ),
             ),
 
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ListTile(
-                  subtitle: Form(
-                      key: _formKey,
-                      child: Row(
-                        children: [
-                          Flexible(child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: CustomTextFormField(
-                                isDark: true,
-                                controller: commentController, label: "Your comment"),
-                          )) ,
-                          ElevatedButton(onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              context.read<PostBloc>().add(AddComment(context: context, comment: commentController.text, postId: widget.post['id'])) ;
-                            }
-                          }, child: const Text("Confirm"))
-                        ],
-                      )),
-                  title: const Text("Comments :"),
+            BlocBuilder<PostBloc, PostState>(builder: (context, state) {
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-              ),
-            ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ListTile(
+                    subtitle: Form(
+                        key: _formKey,
+                        child: Row(
+                          children: [
+                            Flexible(child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: CustomTextFormField(
+                                  isDark: true,
+                                  controller: commentController, label: "Your comment"),
+                            )) ,
+                            ElevatedButton(onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                context.read<PostBloc>().add(AddComment(
+                                    commend: refCommend,
+                                    context: context, comment: commentController.text, postId: widget.post['id'])) ;
+                              }
+                            }, child: const Text("Confirm"))
+                          ],
+                        )),
+                    title:
+                    ListTile(
+                      title: const Text("Comments"),
+                      trailing: refCommend != null ? IconButton(onPressed: () {
+                        refCommend = null;
+                        context.read<PostBloc>().add(RefreshCommends()) ;
+                      }, icon: const Icon(Icons.close,size: 12,)):null,
+                      subtitle: refCommend != null ? Text(refCommend!.message) :null,
+                    )
+                  ),
+                ),
+              );
+            },),
 
             Card(
               shape: RoundedRectangleBorder(
@@ -141,16 +155,41 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                   return Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Column(
-                        children: data.map((e) => ListTile(
-                          trailing: e.isMine ?  IconButton(onPressed: () {
-
-                            context.read<PostBloc>().add(DeleteCommend(context: context, commendId: e.id));
-
-                          }, icon: const Icon(Icons.close,size: 12,)) : null,
-                          leading: UserProfileWidget(url: e.user.image),
-                          subtitle: Text("${e.user.name}\n${e.created_at}"),
-                          isThreeLine: true,
-                          title: Text(e.message),
+                        children: data.map((e) => Column(
+                          children: [
+                            SwipeTo(
+                              key: UniqueKey(),
+                              onRightSwipe: (details) {
+                                refCommend = e;
+                                context.read<PostBloc>().add(RefreshCommends()) ;
+                              },
+                              child: ListTile(
+                              trailing: e.isMine ?  IconButton(onPressed: () {
+                                context.read<PostBloc>().add(DeleteCommend(context: context, commendId: e.id));
+                              }, icon: const Icon(Icons.close,size: 12,)) : null,
+                              leading: UserProfileWidget(url: e.user.image),
+                              subtitle: Text("${e.user.name}\n${e.created_at}"),
+                              isThreeLine: true,
+                              title: Text(e.message),
+                            )),
+                            Padding(padding: const EdgeInsets.only(left: 50),child: Column(
+                              children: e.children.map((e) => SwipeTo(
+                                  key: UniqueKey(),
+                                  onRightSwipe: (details) {
+                                    refCommend = e;
+                                    context.read<PostBloc>().add(RefreshCommends()) ;
+                                  },
+                                  child: ListTile(
+                                trailing: e.isMine ?  IconButton(onPressed: () {
+                                  context.read<PostBloc>().add(DeleteCommend(context: context, commendId: e.id));
+                                }, icon: const Icon(Icons.close,size: 12,)) : null,
+                                leading: UserProfileWidget(url: e.user.image),
+                                subtitle: Text("${e.user.name}\n${e.created_at}"),
+                                isThreeLine: true,
+                                title: Text(e.message),
+                              ))).toList(),
+                            ))
+                          ],
                         )).toList()),
                   );
                 }
@@ -159,6 +198,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
               }, listener: (context, state) async {
 
                 if(state.addComment is ActionSuccess){
+                  refCommend = null ;
                   context.read<PostBloc>().add(LoadCommends(context: context, postId: widget.post['id'],showLoad: false));
                   commentController.clear();
                 }

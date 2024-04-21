@@ -9,10 +9,11 @@ class ApiService extends BaseClientService {
   final StorageService storageService ;
   ApiService({required this.storageService});
 
-  Map<String, String> _addAccessToken(Map<String, String>? headers) {
+  Map<String, String> _addAccessToken(Map<String, String>? headers,bool isAuth) {
     headers = headers ?? <String, String>{};
     String? token = storageService.loadToken() ;
-    headers['Authorization'] = "Bearer ${token ?? ""}";
+    if(isAuth)headers['Authorization'] = "Bearer ${token ?? ""}";
+    headers['Accept'] = "application/json";
     return headers;
   }
 
@@ -28,7 +29,7 @@ class ApiService extends BaseClientService {
 
   @override
   Future<Response> get(String url,{Map<String, String>? headers, bool isAuth = true}) async {
-    if (isAuth) headers = _addAccessToken(headers);
+    headers = _addAccessToken(headers,isAuth);
     Response response = await super.get(url, headers: headers);
     _logRequest(response);
     return response;
@@ -36,7 +37,7 @@ class ApiService extends BaseClientService {
 
   @override
   Future<Response> post(String url, {Map<String, String>? headers, dynamic data, bool isAuth = true}) async {
-    if (isAuth) headers = _addAccessToken(headers);
+    headers = _addAccessToken(headers,isAuth);
     Response response = await super.post(url, headers: headers, data: data);
     _logRequest(response);
     return response;
@@ -45,7 +46,7 @@ class ApiService extends BaseClientService {
 
   @override
   Future<Response> delete(String url, {Map<String, String>? headers, dynamic data, bool isAuth = true}) async {
-    if (isAuth) headers = _addAccessToken(headers);
+    headers = _addAccessToken(headers,isAuth);
     Response response = await super.delete(url, headers: headers, data: data);
     _logRequest(response);
 

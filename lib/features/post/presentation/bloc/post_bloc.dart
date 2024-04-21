@@ -80,7 +80,21 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
     on<AddComment>((event, emit) async {
       showLoadingDialog(context: event.context);
-      var dataState = await postUseCase.addComment(postId: event.postId,comment: event.comment);
+
+
+
+      int? commendId ;
+
+      if(event.commend != null) {
+        CommendModel commendModel = event.commend! ;
+        if(commendModel.commend_id == null) {
+          commendId = commendModel.id;
+        }else{
+          commendId = commendModel.commend_id;
+        }
+      }
+
+      var dataState = await postUseCase.addComment(postId: event.postId,comment: event.comment,commendId: commendId);
       dismissibleDialog(context: event.context) ;
       if (dataState is DataSuccess) {
         emit(state.copyWith(addComment: ActionSuccess("add comment successfully"))) ;
@@ -88,6 +102,10 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       if (dataState is DataFailed) {
         emit(state.copyWith(addComment: ActionError())) ;
       }
+    });
+
+    on<RefreshCommends>((event, emit) async {
+      emit(state.copyWith());
     });
 
     on<DeleteCommend>((event, emit) async {

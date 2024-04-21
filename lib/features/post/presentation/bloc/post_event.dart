@@ -37,11 +37,13 @@ class AddComment extends PostEvent {
   final BuildContext context ;
   final String comment;
   final int postId ;
+  final CommendModel? commend ;
 
   AddComment({
     required this.context,
     required this.comment,
     required this.postId,
+    this.commend,
   });
 }
 
@@ -64,4 +66,8 @@ class LoadCommends extends PostEvent {
     required this.postId,
     this.showLoad = true,
   });
+}
+
+class RefreshCommends extends PostEvent {
+
 }

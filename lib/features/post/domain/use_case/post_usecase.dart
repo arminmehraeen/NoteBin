@@ -61,11 +61,12 @@ class PostUseCase  {
   }
 
 
-  Future<DataState> addComment ({required String comment , required int postId}) async {
+  Future<DataState> addComment ({required String comment , required int postId,int? commendId}) async {
 
     var response = await apiService.post(ApiPath.commends,data: {
       "message" : comment ,
-      "post_id" : postId
+      "post_id" : postId  ,
+      if(commendId != null) "commend_id" : commendId
     }) ;
 
     if(response.statusCode == 201) {
