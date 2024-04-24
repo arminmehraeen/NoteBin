@@ -4,6 +4,7 @@ import 'package:notebin/core/models/commend_model.dart';
 import 'package:notebin/core/widgets/default_widget.dart';
 import 'package:notebin/core/widgets/form/custom_text_form_field.dart';
 import 'package:notebin/features/post/presentation/bloc/post_bloc.dart';
+import 'package:notebin/features/post/presentation/widgets/commend_item_widget.dart';
 import 'package:swipe_to/swipe_to.dart';
 
 
@@ -21,6 +22,19 @@ class ShowPostScreen extends StatefulWidget {
 
 class _ShowPostScreenState extends State<ShowPostScreen> {
 
+  final ScrollController scrollController = ScrollController();
+  final TextEditingController commentController = TextEditingController() ;
+  final _formKey = GlobalKey<FormState>();
+  CommendModel? refCommend;
+
+  void scrollUp() {
+    scrollController.animateTo(
+      scrollController.position.minScrollExtent,
+      duration: const Duration(seconds: 1),
+      curve: Curves.easeIn,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -29,9 +43,11 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
     }
   }
 
-  TextEditingController commentController = TextEditingController() ;
-  final _formKey = GlobalKey<FormState>();
-  CommendModel? refCommend;
+  void onSwipe(CommendModel e) {
+    refCommend = e;
+    context.read<PostBloc>().add(RefreshCommends()) ;
+    scrollUp();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,44 +57,50 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: ListView(
+        child: ListView(physics:const BouncingScrollPhysics(),
+          controller: scrollController,
           shrinkWrap: true,
           children: [
-
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: widget.post['image'] == null ?
-                      Image.asset("assets/images/picture.jpg",width: double.infinity) :
-                      Image.network(ApiPath.imageHost + widget.post['image'],width: double.infinity),
-
-                    ),
-                  ),
-                  ListTile(
-                    trailing:  IconButton(onPressed: () {
-                      context.read<PostBloc>().add(DeletePost(context: context, postId: widget.post['id'].toString()));
-                    }, icon: const Icon(Icons.delete)),
-
-                    isThreeLine: true,
-                    subtitle:Text("${widget.post['user']['name']}\n${widget.post['created_at']}"),
-                    leading: UserProfileWidget(url: widget.post['user']['image'],),
-                    title:Text(widget.post['title']),
-
-                  ),
-                  ListTile(
-                    title: Text(widget.post['body']),
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: widget.post['image'] == null ?
+                  Image.asset("assets/images/picture.jpg",width: double.infinity) :
+                  Image.network(ApiPath.imageHost + widget.post['image'],width: double.infinity),
+                )
               ),
             ),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    ListTile(
+                      trailing:  IconButton(onPressed: () {
+                        context.read<PostBloc>().add(DeletePost(context: context, postId: widget.post['id'].toString()));
+                      }, icon: const Icon(Icons.delete)),
 
+                      isThreeLine: true,
+                      subtitle:Text("${widget.post['user']['name']}\n${widget.post['created_at']}"),
+                      leading: UserProfileWidget(url: widget.post['user']['image'],),
+                      title:Text(widget.post['title']),
+
+                    ),
+                    ListTile(
+                      title: Text(widget.post['body']),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             BlocBuilder<PostBloc, PostState>(builder: (context, state) {
               return Card(
                 shape: RoundedRectangleBorder(
@@ -94,8 +116,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                             Flexible(child: Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: CustomTextFormField(
-                                  isDark: true,
-                                  controller: commentController, label: "Your comment"),
+                                  isDark: true, controller: commentController, label: "Your comment"),
                             )) ,
                             ElevatedButton(onPressed: () {
                               if (_formKey.currentState!.validate()) {
@@ -106,8 +127,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                             }, child: const Text("Confirm"))
                           ],
                         )),
-                    title:
-                    ListTile(
+                    title: ListTile(
                       title: const Text("Comments"),
                       trailing: refCommend != null ? IconButton(onPressed: () {
                         refCommend = null;
@@ -118,8 +138,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                   ),
                 ),
               );
-            },),
-
+            }),
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -153,41 +172,13 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                   }
 
                   return Padding(
-                    padding: const EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Column(
                         children: data.map((e) => Column(
                           children: [
-                            SwipeTo(
-                              key: UniqueKey(),
-                              onRightSwipe: (details) {
-                                refCommend = e;
-                                context.read<PostBloc>().add(RefreshCommends()) ;
-                              },
-                              child: ListTile(
-                              trailing: e.isMine ?  IconButton(onPressed: () {
-                                context.read<PostBloc>().add(DeleteCommend(context: context, commendId: e.id));
-                              }, icon: const Icon(Icons.close,size: 12,)) : null,
-                              leading: UserProfileWidget(url: e.user.image),
-                              subtitle: Text("${e.user.name}\n${e.created_at}"),
-                              isThreeLine: true,
-                              title: Text(e.message),
-                            )),
+                            CommendItemWidget(e, onSwipe:() => onSwipe(e)) ,
                             Padding(padding: const EdgeInsets.only(left: 50),child: Column(
-                              children: e.children.map((e) => SwipeTo(
-                                  key: UniqueKey(),
-                                  onRightSwipe: (details) {
-                                    refCommend = e;
-                                    context.read<PostBloc>().add(RefreshCommends()) ;
-                                  },
-                                  child: ListTile(
-                                trailing: e.isMine ?  IconButton(onPressed: () {
-                                  context.read<PostBloc>().add(DeleteCommend(context: context, commendId: e.id));
-                                }, icon: const Icon(Icons.close,size: 12,)) : null,
-                                leading: UserProfileWidget(url: e.user.image),
-                                subtitle: Text("${e.user.name}\n${e.created_at}"),
-                                isThreeLine: true,
-                                title: Text(e.message),
-                              ))).toList(),
+                              children: e.children.map((e) => CommendItemWidget(e,onSwipe:() => onSwipe(e))).toList(),
                             ))
                           ],
                         )).toList()),
@@ -213,11 +204,11 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                 }
               },),
             )
-
-          ],
-
-        ),
+          ]
+        )
       )
     );
   }
 }
+
+

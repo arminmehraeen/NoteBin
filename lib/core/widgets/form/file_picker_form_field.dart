@@ -8,10 +8,11 @@ import '../../utils/app_ui_helper.dart';
 
 class CustomFilePickerFormField extends StatefulWidget {
   const CustomFilePickerFormField(
-      {Key? key, required this.onChange, this.initValue, this.maximumSize, this.isRequired = true})
+      {Key? key, required this.onChange, this.initValue, this.maximumSize, this.isRequired = true, this.label})
       : super(key: key);
   final Function(ResultInformationModel file) onChange;
   final initValue;
+  final String? label ;
   final int? maximumSize ;
   final bool isRequired;
   @override
@@ -49,11 +50,12 @@ class _FilePickerFormFieldState extends State<CustomFilePickerFormField> {
             Container(
                 decoration: formWidgetDecoration(field.hasError,context),
                 child: ListTile(
-                  title: const Text("Select file"),
+                  title: Text(widget.label ?? "Select file"),
                   isThreeLine: widget.maximumSize != null,
-                  subtitle:Text( "$fileName${widget.maximumSize != null ? "\n${"Allowed size for upload"}: ${widget.maximumSize!} ${"Megabyte"}" : ""}"),
+                  subtitle:Text("$fileName${widget.maximumSize != null ? "\n${"Allowed size for upload"}: ${widget.maximumSize!} ${"Megabyte"}" : ""}",
+                  maxLines: widget.maximumSize != null ? 2 : 1),
                   trailing: ElevatedButton(onPressed: () async {
-                    ResultInformationModel? information = await service.getFile(maximumSize: widget.maximumSize,);
+                    ResultInformationModel? information = await service.getFile(maximumSize: widget.maximumSize);
                     if (information != null) {
                       setState(() {
                         fileName = information.name;

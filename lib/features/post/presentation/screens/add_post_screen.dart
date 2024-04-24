@@ -11,13 +11,11 @@ import '../../../home/presentation/cubit/home_cubit.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({super.key});
-
   @override
   State<AddPostScreen> createState() => _AddPostScreenState();
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
-
 
   final _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
@@ -42,19 +40,21 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                padding: const EdgeInsets.all(20.0),
+                child: ListView(
+                  physics:const BouncingScrollPhysics(),
+                  shrinkWrap: true,
                   children: [
                     CustomTextFormField(
-                        isDark: true ,
+                        isDark: true,
                         controller: titleController, label: "Title"),
                     const SizedBox(height: 15),
                     CustomTextFormField(
-                        isDark: true ,
+                        isDark: true,
                         controller: bodyController, label: "Body",maxLine: 6),
                     const SizedBox(height: 15),
                     CustomFilePickerFormField(
+                        label: "Image",
                         isRequired: true,
                         onChange: (file) async {
                           var ext = file.name.split(".").last;
@@ -66,7 +66,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             filename: "image.$ext",
                           );
                           postFile = multipartFile ;
-                        }) ,
+                        }),
                     const SizedBox(height: 15),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,

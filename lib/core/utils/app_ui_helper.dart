@@ -23,21 +23,31 @@ BoxDecoration formWidgetDecoration(bool hasError,BuildContext context) {
 
 
 void showLoadingDialog ({required BuildContext context}) {
+
+  RoundedRectangleBorder customShape = RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(10.0),
+  );
+
+  AlertDialog roundedDialog = AlertDialog(
+    shape: customShape,
+    title: GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: const Text("Please Wait")),
+    content: const SizedBox(
+      width: 100,
+      height: 50,
+      child: Loading(),
+    ),
+  );
+
   showDialog(
+
       context: context,
+
       barrierDismissible: false,
-      builder: (_) =>  AlertDialog(
-        title: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: const Text("Loading ...")),
-        content: const SizedBox(
-          width: 100,
-          height: 50,
-          child: Loading(),
-        ),
-      )
+      builder: (_) =>  roundedDialog
   );
 }
 

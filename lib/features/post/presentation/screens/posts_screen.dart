@@ -71,15 +71,16 @@ class _PostsScreenState extends State<PostsScreen> {
           return Padding(
             padding: const EdgeInsets.all(10.0),
             child: ListView.separated(
-              separatorBuilder: (context, index) => const SizedBox(height: 2,),
-              itemCount: data.length,
-              itemBuilder: (context, index) {
+              physics: const BouncingScrollPhysics(),
+              separatorBuilder: (context, index) => const SizedBox(height: 2),
+              itemCount: data.length ,
+              itemBuilder: (context,index) {
                 var item = data[index];
                 return GestureDetector(
                     onTap: () => onTap(item),
                     child: PostItemWidget(post: item)
                 );
-              },),
+              }),
           );
         }
 
