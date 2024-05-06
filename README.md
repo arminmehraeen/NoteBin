@@ -1,4 +1,4 @@
-# notebin
+# Notebin
 
 A light social network Flutter app
 
